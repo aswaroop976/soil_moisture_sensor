@@ -1,0 +1,57 @@
+-- Found Git: /usr/bin/git (found version "2.34.1") 
+-- The C compiler identification is GNU 13.2.0
+-- The CXX compiler identification is GNU 13.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /home/arpanswaroop/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20230928/riscv32-esp-elf/bin/riscv32-esp-elf-gcc
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /home/arpanswaroop/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20230928/riscv32-esp-elf/bin/riscv32-esp-elf-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /home/arpanswaroop/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20230928/riscv32-esp-elf/bin/riscv32-esp-elf-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- git rev-parse returned 'fatal: not a git repository (or any of the parent directories): .git'
+-- Could not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32c6
+-- Project sdkconfig file /home/arpanswaroop/esp/soil_moisture/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /home/arpanswaroop/.espressif/python_env/idf5.2_py3.11_env/bin/python (found version "3.11.11") found components: Interpreter 
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "soil_moisture" version: 1
+-- Adding linker script /home/arpanswaroop/esp/soil_moisture/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /home/arpanswaroop/esp/soil_moisture/build/esp-idf/esp_system/ld/sections.ld.in
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.api.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.rvfp.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.newlib.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.version.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.phy.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.coexist.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.net80211.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.pp.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.wdt.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.systimer.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.newlib-normal.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/esp_rom/esp32c6/ld/esp32c6.rom.heap.ld
+-- Adding linker script /home/arpanswaroop/esp/esp-idf/components/soc/esp32c6/ld/esp32c6.peripherals.ld
+-- Components: app_trace app_update bootloader bootloader_support bt cmock console cxx driver efuse esp-tls esp_adc esp_app_format esp_bootloader_format esp_coex esp_common esp_eth esp_event esp_gdbstub esp_hid esp_http_client esp_http_server esp_https_ota esp_https_server esp_hw_support esp_lcd esp_local_ctrl esp_mm esp_netif esp_netif_stack esp_partition esp_phy esp_pm esp_psram esp_ringbuf esp_rom esp_system esp_timer esp_wifi espcoredump esptool_py fatfs freertos hal heap http_parser idf_test ieee802154 json log lwip main mbedtls mqtt newlib nvs_flash nvs_sec_provider openthread partition_table protobuf-c protocomm pthread riscv sdmmc soc spi_flash spiffs tcp_transport ulp unity usb vfs wear_levelling wifi_provisioning wpa_supplicant
+-- Component paths: /home/arpanswaroop/esp/esp-idf/components/app_trace /home/arpanswaroop/esp/esp-idf/components/app_update /home/arpanswaroop/esp/esp-idf/components/bootloader /home/arpanswaroop/esp/esp-idf/components/bootloader_support /home/arpanswaroop/esp/esp-idf/components/bt /home/arpanswaroop/esp/esp-idf/components/cmock /home/arpanswaroop/esp/esp-idf/components/console /home/arpanswaroop/esp/esp-idf/components/cxx /home/arpanswaroop/esp/esp-idf/components/driver /home/arpanswaroop/esp/esp-idf/components/efuse /home/arpanswaroop/esp/esp-idf/components/esp-tls /home/arpanswaroop/esp/esp-idf/components/esp_adc /home/arpanswaroop/esp/esp-idf/components/esp_app_format /home/arpanswaroop/esp/esp-idf/components/esp_bootloader_format /home/arpanswaroop/esp/esp-idf/components/esp_coex /home/arpanswaroop/esp/esp-idf/components/esp_common /home/arpanswaroop/esp/esp-idf/components/esp_eth /home/arpanswaroop/esp/esp-idf/components/esp_event /home/arpanswaroop/esp/esp-idf/components/esp_gdbstub /home/arpanswaroop/esp/esp-idf/components/esp_hid /home/arpanswaroop/esp/esp-idf/components/esp_http_client /home/arpanswaroop/esp/esp-idf/components/esp_http_server /home/arpanswaroop/esp/esp-idf/components/esp_https_ota /home/arpanswaroop/esp/esp-idf/components/esp_https_server /home/arpanswaroop/esp/esp-idf/components/esp_hw_support /home/arpanswaroop/esp/esp-idf/components/esp_lcd /home/arpanswaroop/esp/esp-idf/components/esp_local_ctrl /home/arpanswaroop/esp/esp-idf/components/esp_mm /home/arpanswaroop/esp/esp-idf/components/esp_netif /home/arpanswaroop/esp/esp-idf/components/esp_netif_stack /home/arpanswaroop/esp/esp-idf/components/esp_partition /home/arpanswaroop/esp/esp-idf/components/esp_phy /home/arpanswaroop/esp/esp-idf/components/esp_pm /home/arpanswaroop/esp/esp-idf/components/esp_psram /home/arpanswaroop/esp/esp-idf/components/esp_ringbuf /home/arpanswaroop/esp/esp-idf/components/esp_rom /home/arpanswaroop/esp/esp-idf/components/esp_system /home/arpanswaroop/esp/esp-idf/components/esp_timer /home/arpanswaroop/esp/esp-idf/components/esp_wifi /home/arpanswaroop/esp/esp-idf/components/espcoredump /home/arpanswaroop/esp/esp-idf/components/esptool_py /home/arpanswaroop/esp/esp-idf/components/fatfs /home/arpanswaroop/esp/esp-idf/components/freertos /home/arpanswaroop/esp/esp-idf/components/hal /home/arpanswaroop/esp/esp-idf/components/heap /home/arpanswaroop/esp/esp-idf/components/http_parser /home/arpanswaroop/esp/esp-idf/components/idf_test /home/arpanswaroop/esp/esp-idf/components/ieee802154 /home/arpanswaroop/esp/esp-idf/components/json /home/arpanswaroop/esp/esp-idf/components/log /home/arpanswaroop/esp/esp-idf/components/lwip /home/arpanswaroop/esp/soil_moisture/main /home/arpanswaroop/esp/esp-idf/components/mbedtls /home/arpanswaroop/esp/esp-idf/components/mqtt /home/arpanswaroop/esp/esp-idf/components/newlib /home/arpanswaroop/esp/esp-idf/components/nvs_flash /home/arpanswaroop/esp/esp-idf/components/nvs_sec_provider /home/arpanswaroop/esp/esp-idf/components/openthread /home/arpanswaroop/esp/esp-idf/components/partition_table /home/arpanswaroop/esp/esp-idf/components/protobuf-c /home/arpanswaroop/esp/esp-idf/components/protocomm /home/arpanswaroop/esp/esp-idf/components/pthread /home/arpanswaroop/esp/esp-idf/components/riscv /home/arpanswaroop/esp/esp-idf/components/sdmmc /home/arpanswaroop/esp/esp-idf/components/soc /home/arpanswaroop/esp/esp-idf/components/spi_flash /home/arpanswaroop/esp/esp-idf/components/spiffs /home/arpanswaroop/esp/esp-idf/components/tcp_transport /home/arpanswaroop/esp/esp-idf/components/ulp /home/arpanswaroop/esp/esp-idf/components/unity /home/arpanswaroop/esp/esp-idf/components/usb /home/arpanswaroop/esp/esp-idf/components/vfs /home/arpanswaroop/esp/esp-idf/components/wear_levelling /home/arpanswaroop/esp/esp-idf/components/wifi_provisioning /home/arpanswaroop/esp/esp-idf/components/wpa_supplicant
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/arpanswaroop/esp/soil_moisture/build

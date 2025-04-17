@@ -1,0 +1,239 @@
+[0;32mI (104) esp_image: segment 1: paddr=00019d5c vaddr=408000) cpu_start: ESP-IDF:          v5.2.4[0m
+[0;32mI (21ESP-ROM:esp32c6-20220919
+Build:Sep 19 2022
+rst:0x15 (USB_UART_HPSYS),boot:0x6f (SPI_FAST_FLASH_BOOT)
+Saved PC:0x400294a6
+SPIWP:0xee
+mode:DIO, clock div:2
+load:0x40875720,len:0x18ec
+load:0x4086c410,len:0xe60
+load:0x4086e610,len:0x2f2c
+entry 0x4086c41a
+[0;32mI (23) boot: ESP-IDF v5.2.4 2nd stage bootloader[0m
+[0;32mI (23) boot: compile time Apr 16 2025 23:47:36[0m
+[0;32mI (24) boot: chip revision: v0.1[0m
+[0;32mI (26) boot: efuse block revision: v0.2[0m
+[0;32mI (30) boot.esp32c6: SPI Speed      : 80MHz[0m
+[0;32mI (35) boot.esp32c6: SPI Mode       : DIO[0m
+[0;32mI (40) boot.esp32c6: SPI Flash Size : 2MB[0m
+[0;32mI (44) boot: Enabling RNG early entropy source...[0m
+[0;32mI (50) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (61) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (68) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (83) boot: End of partition table[0m
+[0;32mI (87) esp_image: segment 0: paddr=00010020 vaddr=42018020 size=09d34h ( 40244) map[0m
+[0;32mI (104) esp_image: segment 1: paddr=00019d5c vaddr=40800000 size=062bch ( 25276) load[0m
+[0;32mI (110) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=13248h ( 78408) map[0m
+[0;32mI (128) esp_image: segment 3: paddr=00033270 vaddr=408062bc size=043a8h ( 17320) load[0m
+[0;32mI (132) esp_image: segment 4: paddr=00037620 vaddr=4080a670 size=0175ch (  5980) load[0m
+[0;32mI (135) esp_image: segment 5: paddr=00038d84 vaddr=50000000 size=00004h (     4) load[0m
+[0;32mI (144) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (148) boot: Disabling RNG early entropy source...[0m
+[0;32mI (165) cpu_start: Unicore app[0m
+[0;33mW (174) clk: esp_perip_clk_init() has not been implemented yet[0m
+[0;32mI (180) cpu_start: Pro cpu start user code[0m
+[0;32mI (180) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (181) cpu_start: Application information:[0m
+[0;32mI (183) cpu_start: Project name:     soil_moisture[0m
+[0;32mI (189) cpu_start: App version:      1[0m
+[0;32mI (193) cpu_start: Compile time:     Apr 16 2025 23:47:30[0m
+[0;32mI (199) cpu_start: ELF file SHA256:  b024d7376...[0m
+[0;32mI (205) cpu_start: ESP-IDF:          v5.2.4[0m
+[0;32mI (209) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (214) cpu_start: Max chip rev:     v0.99 [0m
+[0;32mI (219) cpu_start: Chip rev:         v0.1[0m
+[0;32mI (224) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (231) heap_init: At 4080CD50 len 0006F8C0 (446 KiB): RAM[0m
+[0;32mI (237) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM[0m
+[0;32mI (243) heap_init: At 50000004 len 00003FE4 (15 KiB): RTCRAM[0m
+[0;32mI (250) spi_flash: detected chip: generic[0m
+[0;32mI (254) spi_flash: flash io: dio[0m
+[0;33mW (258) spi_flash: Detected size(8192k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (272) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (278) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (285) coexist: coex firmware version: 994b23e[0m
+[0;32mI (290) coexist: coexist rom version 5b8dcfa[0m
+[0;32mI (296) main_task: Started on CPU0[0m
+[0;32mI (296) main_task: Calling app_main()[0m
+[0;32mI (296) gpio: GPIO[2]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (306) MOISTURE: Curve-fitting calibration enabled[0m
+[0;32mI (316) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (316) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (1326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (1326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (2326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (2326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (3326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (3326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (4326) MOISTURE: Raw ADC[2]: 2640[0m
+[0;32mI (4326) MOISTURE: Calibrated: 2669 mV[0m
+[0;32mI (5326) MOISTURE: Raw ADC[2]: 1617[0m
+[0;32mI (5326) MOISTURE: Calibrated: 1637 mV[0m
+[0;32mI (6326) MOISTURE: Raw ADC[2]: 1633[0m
+[0;32mI (6326) MOISTURE: Calibrated: 1653 mV[0m
+[0;32mI (7326) MOISTURE: Raw ADC[2]: 1648[0m
+[0;32mI (7326) MOISTURE: Calibrated: 1668 mV[0m
+[0;32mI (8326) MOISTURE: Raw ADC[2]: 2016[0m
+[0;32mI (8326) MOISTURE: Calibrated: 2039 mV[0m
+[0;32mI (9326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (9326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (10326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (10326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (11326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (11326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (12326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (12326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (13326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (13326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (14326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (14326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (15326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (15326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (16326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (16326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (17326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (17326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (18326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (18326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (19326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (19326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (20326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (20326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (21326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (21326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (22326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (22326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (23326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (23326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (24326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (24326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (25326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (25326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (26326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (26326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (27326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (27326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (28326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (28326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (29326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (29326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (30326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (30326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (31326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (31326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (32326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (32326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (33326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (33326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (34326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (34326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (35326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (35326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (36326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (36326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (37326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (37326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (38326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (38326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (39326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (39326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (40326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (40326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (41326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (41326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (42326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (42326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (43326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (43326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (44326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (44326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (45326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (45326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (46326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (46326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (47326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (47326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (48326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (48326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (49326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (49326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (50326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (50326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (51326) MOISTURE: Raw ADC[2]: 2736[0m
+[0;32mI (51326) MOISTURE: Calibrated: 2765 mV[0m
+[0;32mI (52326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (52326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (53326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (53326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (54326) MOISTURE: Raw ADC[2]: 2737[0m
+[0;32mI (54326) MOISTURE: Calibrated: 2766 mV[0m
+[0;32mI (55326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (55326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (56326) MOISTURE: Raw ADC[2]: 2737[0m
+[0;32mI (56326) MOISTURE: Calibrated: 2766 mV[0m
+[0;32mI (57326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (57326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (58326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (58326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (59326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (59326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (60326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (60326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (61326) MOISTURE: Raw ADC[2]: 2737[0m
+[0;32mI (61326) MOISTURE: Calibrated: 2766 mV[0m
+[0;32mI (62326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (62326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (63326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (63326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (64326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (64326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (65326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (65326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (66326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (66326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (67326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (67326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (68326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (68326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (69326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (69326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (70326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (70326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (71326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (71326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (72326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (72326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (73326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (73326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (74326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (74326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (75326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (75326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (76326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (76326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (77326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (77326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (78326) MOISTURE: Raw ADC[2]: 2705[0m
+[0;32mI (78326) MOISTURE: Calibrated: 2734 mV[0m
+[0;32mI (79326) MOISTURE: Raw ADC[2]: 2736[0m
+[0;32mI (79326) MOISTURE: Calibrated: 2765 mV[0m
+[0;32mI (80326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (80326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (81326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (81326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (82326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (82326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (83326) MOISTURE: Raw ADC[2]: 2704[0m
+[0;32mI (83326) MOISTURE: Calibrated: 2733 mV[0m
+[0;32mI (84326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (84326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (85326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (85326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (86326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (86326) MOISTURE: Calibrated: 2750 mV[0m
+[0;32mI (87326) MOISTURE: Raw ADC[2]: 2720[0m
+[0;32mI (87326) MOISTURE: Calibrated: 2749 mV[0m
+[0;32mI (88326) MOISTURE: Raw ADC[2]: 2721[0m
+[0;32mI (88326) MOISTURE: Calibrated: 2750 mV[0m

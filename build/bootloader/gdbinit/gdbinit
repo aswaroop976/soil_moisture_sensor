@@ -1,0 +1,2 @@
+source /home/arpanswaroop/esp/soil_moisture/build/bootloader/gdbinit/symbols
+source /home/arpanswaroop/esp/soil_moisture/build/bootloader/gdbinit/connect

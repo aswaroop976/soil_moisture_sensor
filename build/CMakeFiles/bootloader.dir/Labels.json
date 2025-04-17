@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}

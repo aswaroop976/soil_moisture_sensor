@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader
+/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader.rule
+/home/arpanswaroop/esp/soil_moisture/build/CMakeFiles/bootloader-complete.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/arpanswaroop/esp/soil_moisture/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
