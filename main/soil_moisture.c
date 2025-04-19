@@ -1,143 +1,190 @@
-#include <string.h>
+#include <stdio.h>
+#include "sdkconfig.h"
+#include "esp_netif.h"
+#include "nvs_flash.h"
+#include "esp_event.h"
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "nvs_flash.h"
-#include "esp_event.h"
-#include "esp_netif.h"
-#include "esp_wifi.h"
+#include "esp_err.h"
 #include "esp_adc/adc_oneshot.h"
-#include "esp_tls.h"
+#include "esp_adc/adc_cali.h"
+#include "esp_wifi.h"
+#include "esp_system.h"
+#include "esp_log.h"
+#include "lwip/sockets.h"
 
-static const char *TAG = "MOISTURE_NET";
+static const char *TAG = "MOISTURE";
 
-/* --- ADC setup from earlier example --- */
-#define MOISTURE_ADC_CHANNEL  ADC_CHANNEL_2  // GPIO2
-#define ADC_ATTEN             ADC_ATTEN_DB_12
+// Pin and channel definitions
+#define MOISTURE_ADC_CHANNEL  ADC_CHANNEL_2   // corresponds to GPIO2
+#define ADC_ATTEN             ADC_ATTEN_DB_12 // full-scale ~3.3V (adjust per your needs)
 #define ADC_BITWIDTH          ADC_BITWIDTH_DEFAULT
 
-static adc_oneshot_unit_handle_t adc_handle;
+// Wi-Fi Configurations
+#define WIFI_SSID     "TP-Link_31B2"    // Replace with your Wi-Fi SSID
+#define WIFI_PASS     "sweets1303" // Replace with your Wi-Fi password
+#define WIFI_MAX_RETRY  5
 
-/* --- Embedded CA cert --- */
-extern const unsigned char ca_cert_pem_start[] asm("_binary_ca_cert_pem_start");
-extern const unsigned char ca_cert_pem_end[]   asm("_binary_ca_cert_pem_end");
+// Server configuration
+#define SERVER_IP "192.168.0.101"  // Replace with the server's IP address
+#define SERVER_PORT 12345          // Replace with the server's port
 
-/* --- 1) Initialize Wi‑Fi in Station mode --- */
-static void wifi_init_sta(void)
-{
-    ESP_ERROR_CHECK(nvs_flash_init());
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-    esp_netif_t *sta = esp_netif_create_default_wifi_sta();
-    (void) sta;
+// Wi-Fi event handler
+static EventGroupHandle_t wifi_event_group;
+#define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT      BIT1
+
+static int s_retry_num = 0;
+
+static void event_handler(void *arg, esp_event_base_t event_base,
+                           int32_t event_id, void *event_data) {
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_CONNECTED) {
+        ESP_LOGI(TAG, "Connected to Wi-Fi");
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_retry_num < WIFI_MAX_RETRY) {
+            esp_wifi_connect();
+            s_retry_num++;
+            ESP_LOGI(TAG, "Retrying to connect to Wi-Fi...");
+        } else {
+            xEventGroupSetBits(wifi_event_group, WIFI_FAIL_BIT);
+        }
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
+    }
+}
+
+// Wi-Fi initialization function
+void wifi_init_sta(void) {
+    wifi_event_group = xEventGroupCreate();
+
+    esp_netif_init();
+    esp_event_loop_create_default();
+    esp_netif_create_default_wifi_sta();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
-    wifi_config_t wifi_cfg = {
+    esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL);
+    esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL);
+
+    wifi_config_t wifi_config = {
         .sta = {
-            .ssid = "TP-Link_31B2",
-            .password = "sweets1303",
-            /* Optional: .scan_method, .threshold settings */
+            .ssid = WIFI_SSID,
+            .password = WIFI_PASS,
+            .threshold.authmode = WIFI_AUTH_WPA2_PSK,
+            .pmf_cfg = {
+                .capable = true,
+                .required = false,
+            },
         },
     };
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg));
+    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
-    ESP_ERROR_CHECK(esp_wifi_connect());
 
-    ESP_LOGI(TAG, "Waiting for IP address...");
-    /* Simple block until got IP—production code should use event handlers */
-    vTaskDelay(pdMS_TO_TICKS(5000));
-    ESP_LOGI(TAG, "Wi-Fi should be connected now");
-}
- 
-/* --- 2) Task to read ADC and send over TLS every 10s --- */
-static void transmit_task(void *arg)
-{
-    /* Configure ADC channel once */
-    adc_oneshot_chan_cfg_t ch_cfg = {
-        .atten = ADC_ATTEN,
-        .bitwidth = ADC_BITWIDTH
-    };
-    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc_handle,
-                                               MOISTURE_ADC_CHANNEL,
-                                               &ch_cfg));
+    ESP_LOGI(TAG, "Connecting to Wi-Fi...");
+    EventBits_t bits = xEventGroupWaitBits(wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
-    /* Set up TLS config */
-    esp_tls_cfg_t tls_cfg = {
-        .cacert_pem_buf  = ca_cert_pem_start,
-        .cacert_pem_bytes= ca_cert_pem_end - ca_cert_pem_start,
-        .timeout_ms      = 5000,
-    };
-
-    while (true) {
-        int raw;
-        ESP_ERROR_CHECK(adc_oneshot_read(adc_handle,
-                                         MOISTURE_ADC_CHANNEL,
-                                         &raw));
-        ESP_LOGI(TAG, "Moisture(raw) = %d", raw);
-
-        /* 2.1) establish a TLS connection */
-        esp_tls_t *tls = esp_tls_init();
-        //struct esp_tls *tls = esp_tls_conn_new(
-        //    "my.server.com", strlen("my.server.com"),
-        //    443, &tls_cfg
-        //);
-        // :contentReference[oaicite:0]{index=0}
-        if (!tls) {
-            ESP_LOGE(TAG, "TLS init failed");
-            return;
-        }
-
-        int ret = esp_tls_conn_new_sync(
-            "192.168.0.101", strlen("192.168.0.101"),
-            8443, &tls_cfg, tls
-        );
-        if (ret != 1) {
-            ESP_LOGE(TAG, "TLS sync connect failed: %d", ret);
-            esp_tls_conn_destroy(tls);
-            return;
-        }
-        /* 2.2) format a simple JSON payload */
-        char payload[64];
-        int len = snprintf(payload, sizeof(payload),
-                           "{\"moisture\":%d}\r\n", raw);
-
-        /* 2.3) send it over the socket */
-        ssize_t written = esp_tls_conn_write(
-            tls, (const unsigned char*)payload, len
-        );
-        if (written < 0) {
-            ESP_LOGE(TAG, "esp_tls_conn_write - %d", (int)written);
-        } else {
-            ESP_LOGI(TAG, "Sent %d bytes", (int)written);
-        }
-
-        /* 2.4) tear down TLS session */
-        esp_tls_conn_destroy(tls);
-
-    //wait:
-        vTaskDelay(pdMS_TO_TICKS(10000));
+    if (bits & WIFI_CONNECTED_BIT) {
+        ESP_LOGI(TAG, "Connected to Wi-Fi");
+    } else if (bits & WIFI_FAIL_BIT) {
+        ESP_LOGI(TAG, "Failed to connect to Wi-Fi");
+    } else {
+        ESP_LOGE(TAG, "Unexpected event");
     }
 }
 
-/* --- 3) app_main sets up ADC, Wi‑Fi, then starts the task --- */
+// TCP Socket function to send data to the server
+void send_to_server(int moisture_value) {
+    struct sockaddr_in dest_addr;
+    dest_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_port = htons(SERVER_PORT);
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    
+    if (sock < 0) {
+        ESP_LOGE(TAG, "Socket creation failed!");
+        return;
+    }
+
+    int err = connect(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    if (err < 0) {
+        ESP_LOGE(TAG, "Unable to connect to server: errno %d", errno);
+        return;
+    }
+
+    char payload[64];
+    snprintf(payload, sizeof(payload), "Moisture Value: %d", moisture_value);
+    
+    err = send(sock, payload, strlen(payload), 0);
+    if (err < 0) {
+        ESP_LOGE(TAG, "Error sending data: errno %d", errno);
+    } else {
+        ESP_LOGI(TAG, "Data sent to server: %s", payload);
+    }
+
+    shutdown(sock, 0);
+    close(sock);
+}
+
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Starting up…");
+    // --- 1) Initialize NVS ---
+    ESP_ERROR_CHECK(nvs_flash_init());
 
-    /* ADC one‑shot init */
+    // --- 2) Initialize Wi-Fi ---
+    wifi_init_sta();
+
+    // --- 3) Install ADC one-shot driver ---
+    adc_oneshot_unit_handle_t adc_handle;
     adc_oneshot_unit_init_cfg_t init_cfg = {
         .unit_id = ADC_UNIT_1,
-        .ulp_mode = ADC_ULP_MODE_DISABLE,
+        .ulp_mode = ADC_ULP_MODE_DISABLE,    // not using ultra-low-power mode
     };
-    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_cfg, &adc_handle));
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_cfg, &adc_handle));  
 
-    /* Wi‑Fi init */
-    wifi_init_sta();  // :contentReference[oaicite:1]{index=1}
+    // --- 4) Configure the channel ---
+    adc_oneshot_chan_cfg_t chan_cfg = {
+        .atten = ADC_ATTEN,
+        .bitwidth = ADC_BITWIDTH,
+    };
+    ESP_ERROR_CHECK(
+        adc_oneshot_config_channel(adc_handle, MOISTURE_ADC_CHANNEL, &chan_cfg)
+    );
 
-    /* Launch Tx task */
-    xTaskCreate(transmit_task, "tx_task",
-                6*1024, NULL, tskIDLE_PRIORITY+1, NULL);
+    // --- 5) (Optional) Set up calibration ---
+    adc_cali_handle_t cal_handle = NULL;
+    bool do_calibration = false;
+    {
+        adc_cali_curve_fitting_config_t curve_cfg = {
+            .unit_id = ADC_UNIT_1,
+            .chan    = MOISTURE_ADC_CHANNEL,
+            .atten   = ADC_ATTEN,
+            .bitwidth= ADC_BITWIDTH,
+        };
+        if (adc_cali_create_scheme_curve_fitting(&curve_cfg, &cal_handle) == ESP_OK) {
+            ESP_LOGI(TAG, "Curve-fitting calibration enabled");
+            do_calibration = true;
+        } 
+    }
+
+    // --- 6) Read loop ---
+    while (1) {
+        int raw;
+        ESP_ERROR_CHECK(adc_oneshot_read(adc_handle, MOISTURE_ADC_CHANNEL, &raw));
+        ESP_LOGI(TAG, "Raw ADC[%d]: %d", MOISTURE_ADC_CHANNEL, raw);
+
+        if (do_calibration) {
+            int voltage_mv;
+            ESP_ERROR_CHECK(adc_cali_raw_to_voltage(cal_handle, raw, &voltage_mv));
+            ESP_LOGI(TAG, "Calibrated: %d mV", voltage_mv);
+            send_to_server(voltage_mv);  // Send the moisture data to the server
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
