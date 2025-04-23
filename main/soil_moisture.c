@@ -14,6 +14,7 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "lwip/sockets.h"
+#include "esp_tls.h"
 
 static const char *TAG = "MOISTURE";
 
@@ -38,6 +39,13 @@ static EventGroupHandle_t wifi_event_group;
 #define WIFI_FAIL_BIT      BIT1
 
 static int s_retry_num = 0;
+
+extern const uint8_t ca_cert_pem_start[]   asm("_binary_ca_cert_pem_start");
+extern const uint8_t ca_cert_pem_end[]     asm("_binary_ca_cert_pem_end");
+extern const uint8_t client_cert_pem_start[] asm("_binary_client_cert_pem_start");
+extern const uint8_t client_cert_pem_end[]   asm("_binary_client_cert_pem_end");
+extern const uint8_t client_key_pem_start[]  asm("_binary_client_key_pem_start");
+extern const uint8_t client_key_pem_end[]    asm("_binary_client_key_pem_end");
 
 static void event_handler(void *arg, esp_event_base_t event_base,
                            int32_t event_id, void *event_data) {
@@ -100,7 +108,7 @@ void wifi_init_sta(void) {
 }
 
 // TCP Socket function to send data to the server
-void send_to_server(int moisture_value, int sock) {
+void send_to_server(int moisture_value, esp_tls_t *tls) {
     //struct sockaddr_in dest_addr;
     //dest_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
     //dest_addr.sin_family = AF_INET;
@@ -119,9 +127,10 @@ void send_to_server(int moisture_value, int sock) {
     //}
 
     char payload[64];
-    snprintf(payload, sizeof(payload), "Moisture Value: %d", moisture_value);
+    int len = snprintf(payload, sizeof(payload), "Moisture Value: %d", moisture_value);
     
-    int err = send(sock, payload, strlen(payload), 0);
+    //int err = send(sock, payload, strlen(payload), 0);
+    int err = esp_tls_conn_write(tls, (const unsigned char *)payload, len);
     if (err < 0) {
         ESP_LOGE(TAG, "Error sending data: errno %d", errno);
     } else {
@@ -172,24 +181,45 @@ void app_main(void)
     }
 
     // --- 6) Establish TCP connection with Server ---
-    struct sockaddr_in dest_addr;
-    dest_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
-    dest_addr.sin_family = AF_INET;
-    dest_addr.sin_port = htons(SERVER_PORT);
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    //struct sockaddr_in dest_addr;
+    //dest_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
+    //dest_addr.sin_family = AF_INET;
+    //dest_addr.sin_port = htons(SERVER_PORT);
+    //int sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (sock < 0) {
-        ESP_LOGE(TAG, "Socket creation failed!");
+    //if (sock < 0) {
+    //    ESP_LOGE(TAG, "Socket creation failed!");
+    //    return;
+    //}
+
+    //int err = connect(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    //if (err < 0) {
+    //    ESP_LOGE(TAG, "Unable to connect to server: errno %d", errno);
+    //    return;
+    //}
+
+    // --- 6) Establish TLS connection ---
+    esp_tls_cfg_t tls_cfg = {
+        .cacert_pem_buf = ca_cert_pem_start,
+        .cacert_pem_bytes = ca_cert_pem_end - ca_cert_pem_start,
+        .clientcert_pem_buf = client_cert_pem_start,
+        .clientcert_pem_bytes = client_cert_pem_end - client_cert_pem_start,
+        .clientkey_pem_buf = client_key_pem_start,
+        .clientkey_pem_bytes = client_key_pem_end - client_key_pem_start,
+    };
+
+    esp_tls_t *tls = esp_tls_init();
+
+    int ret = esp_tls_conn_new_sync(SERVER_IP, strlen("192.168.0.101"), 12345, &tls_cfg, tls);
+
+    if(ret != 1){
+        ESP_LOGE(TAG, "TLS connection failed");
+        esp_tls_conn_destroy(tls);
         return;
     }
+    ESP_LOGI(TAG, "TLS connection OK");
 
-    int err = connect(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-    if (err < 0) {
-        ESP_LOGE(TAG, "Unable to connect to server: errno %d", errno);
-        return;
-    }
-
-    // --- 6) Read loop ---
+    // --- 7) Read loop ---
     while (1) {
         int raw;
         ESP_ERROR_CHECK(adc_oneshot_read(adc_handle, MOISTURE_ADC_CHANNEL, &raw));
@@ -199,12 +229,14 @@ void app_main(void)
             int voltage_mv;
             ESP_ERROR_CHECK(adc_cali_raw_to_voltage(cal_handle, raw, &voltage_mv));
             ESP_LOGI(TAG, "Calibrated: %d mV", voltage_mv);
-            send_to_server(voltage_mv, sock);  // Send the moisture data to the server
+            send_to_server(voltage_mv, tls);  // Send the moisture data to the server
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
-    shutdown(sock, 0);
-    close(sock);
+    esp_tls_conn_destroy(tls);
+    ESP_LOGI(TAG, "TLS connection closed");
+    //shutdown(sock, 0);
+    //close(sock);
 }
