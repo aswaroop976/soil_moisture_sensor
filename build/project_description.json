@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "soil_moisture",
-    "project_version":    "1",
+    "project_version":    "6dbdf3f-dirty",
     "project_path":       "/home/arpanswaroop/esp/soil_moisture",
     "idf_path":           "/home/arpanswaroop/esp/esp-idf",
     "build_dir":          "/home/arpanswaroop/esp/soil_moisture/build",
@@ -800,12 +800,12 @@
             "dir": "/home/arpanswaroop/esp/soil_moisture/main",
             "type": "LIBRARY",
             "lib": "__idf_main",
-            "reqs": [ "esp_adc" ],
+            "reqs": [ "lwip", "esp_adc", "esp_wifi", "esp_event", "nvs_flash" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/home/arpanswaroop/esp/soil_moisture/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/arpanswaroop/esp/soil_moisture/main/soil_moisture.c" ],
+            "sources": [ "/home/arpanswaroop/esp/soil_moisture/main/soil_moisture.c", "/home/arpanswaroop/esp/soil_moisture/build/ca_cert.pem.S" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {
@@ -2097,7 +2097,7 @@
             "prefix": "idf",
             "dir": "/home/arpanswaroop/esp/soil_moisture/main",
             "lib": "__idf_main",
-            "reqs": [ "esp_adc" ],
+            "reqs": [ "lwip", "esp_adc", "esp_wifi", "esp_event", "nvs_flash" ],
             "priv_reqs": [],
             "managed_reqs": [],
             "managed_priv_reqs": [],
