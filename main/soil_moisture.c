@@ -3,6 +3,7 @@
 #include "esp_netif.h"
 #include "nvs_flash.h"
 #include "esp_event.h"
+#include "driver/gpio.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -15,6 +16,7 @@
 #include "esp_log.h"
 #include "lwip/sockets.h"
 #include "esp_tls.h"
+#include <fcntl.h>
 
 static const char *TAG = "MOISTURE";
 
@@ -23,6 +25,9 @@ static const char *TAG = "MOISTURE";
 #define ADC_ATTEN             ADC_ATTEN_DB_12 // full-scale ~3.3V (adjust per your needs)
 #define ADC_BITWIDTH          ADC_BITWIDTH_DEFAULT
 
+// Relay GPIO
+#define RELAY_GPIO    GPIO_NUM_5  
+
 // Wi-Fi Configurations
 // at home: TP-Link_31B2, sweets1303 
 #define WIFI_SSID     "TP-Link_31B2"    // Replace with your Wi-Fi SSID
@@ -30,7 +35,7 @@ static const char *TAG = "MOISTURE";
 #define WIFI_MAX_RETRY  5
 
 // Server configuration
-#define SERVER_IP "192.168.0.101"  // Replace with the server's IP address
+#define SERVER_IP "10.183.76.126"  // Replace with the server's IP address
 #define SERVER_PORT 12345          // Replace with the server's port
 
 // Wi-Fi event handler
@@ -180,24 +185,6 @@ void app_main(void)
         } 
     }
 
-    // --- 6) Establish TCP connection with Server ---
-    //struct sockaddr_in dest_addr;
-    //dest_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
-    //dest_addr.sin_family = AF_INET;
-    //dest_addr.sin_port = htons(SERVER_PORT);
-    //int sock = socket(AF_INET, SOCK_STREAM, 0);
-
-    //if (sock < 0) {
-    //    ESP_LOGE(TAG, "Socket creation failed!");
-    //    return;
-    //}
-
-    //int err = connect(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-    //if (err < 0) {
-    //    ESP_LOGE(TAG, "Unable to connect to server: errno %d", errno);
-    //    return;
-    //}
-
     // --- 6) Establish TLS connection ---
     esp_tls_cfg_t tls_cfg = {
         .cacert_pem_buf = ca_cert_pem_start,
@@ -219,6 +206,23 @@ void app_main(void)
     }
     ESP_LOGI(TAG, "TLS connection OK");
 
+    // -- 7) Setup relay GPIO pin
+    // configure the relay pin as push-pull output, start low (relay off)
+    gpio_config_t io_conf = {
+        .pin_bit_mask = 1ULL << RELAY_GPIO,
+        .mode         = GPIO_MODE_OUTPUT,
+        .pull_up_en   = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type    = GPIO_INTR_DISABLE
+    };
+    gpio_config(&io_conf);
+    gpio_set_level(RELAY_GPIO, 0);
+    
+    // Make TLS reads non-blocking
+   // int fd = tls->sockfd;
+   // int flags = fcntl(fd, F_GETFL, 0);
+   // fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+
     // --- 7) Read loop ---
     while (1) {
         int raw;
@@ -231,7 +235,23 @@ void app_main(void)
             ESP_LOGI(TAG, "Calibrated: %d mV", voltage_mv);
             send_to_server(voltage_mv, tls);  // Send the moisture data to the server
         }
-
+        // — 2) non-blocking read for any command —
+        char cmd_buf[16];
+        int r = esp_tls_conn_read(tls,
+                                  (unsigned char*)cmd_buf,
+                                  sizeof(cmd_buf)-1);
+        if (r > 0) {
+            cmd_buf[r] = '\0';
+            ESP_LOGI(TAG, "Command from server: %s", cmd_buf);
+            if (strcmp(cmd_buf, "WATER_ON") == 0) {
+                // turn relay on for 2 seconds
+                gpio_set_level(RELAY_GPIO, 1);
+                vTaskDelay(pdMS_TO_TICKS(2000));
+                gpio_set_level(RELAY_GPIO, 0);
+            } else if (strcmp(cmd_buf, "WATER_OFF") == 0){
+                gpio_set_level(RELAY_GPIO, 0);
+            }
+        }
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
