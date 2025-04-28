@@ -193,6 +193,7 @@ void app_main(void)
         .clientcert_pem_bytes = client_cert_pem_end - client_cert_pem_start,
         .clientkey_pem_buf = client_key_pem_start,
         .clientkey_pem_bytes = client_key_pem_end - client_key_pem_start,
+        //.non_block = true,
     };
 
     esp_tls_t *tls = esp_tls_init();
@@ -251,7 +252,11 @@ void app_main(void)
             } else if (strcmp(cmd_buf, "WATER_OFF") == 0){
                 gpio_set_level(RELAY_GPIO, 0);
             }
+        } else {
+            gpio_set_level(RELAY_GPIO, 0);
         }
+
+
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
