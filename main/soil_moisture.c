@@ -35,7 +35,7 @@ static const char *TAG = "MOISTURE";
 #define WIFI_MAX_RETRY  5
 
 // Server configuration
-#define SERVER_IP "10.183.76.126"  // Replace with the server's IP address
+#define SERVER_IP "10.183.77.83"  // Replace with the server's IP address
 #define SERVER_PORT 12345          // Replace with the server's port
 
 // Wi-Fi event handler
