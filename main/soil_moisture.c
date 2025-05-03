@@ -132,7 +132,7 @@ void send_to_server(int moisture_value, esp_tls_t *tls) {
     //}
 
     char payload[64];
-    int len = snprintf(payload, sizeof(payload), "Moisture Value: %d", moisture_value);
+    int len = snprintf(payload, sizeof(payload), "device1:%d", moisture_value);
     
     //int err = send(sock, payload, strlen(payload), 0);
     int err = esp_tls_conn_write(tls, (const unsigned char *)payload, len);
