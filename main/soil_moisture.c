@@ -217,7 +217,7 @@ void app_main(void)
         .intr_type    = GPIO_INTR_DISABLE
     };
     gpio_config(&io_conf);
-    gpio_set_level(RELAY_GPIO, 0);
+    gpio_set_level(RELAY_GPIO, 1);
     
     // Make TLS reads non-blocking
    // int fd = tls->sockfd;
