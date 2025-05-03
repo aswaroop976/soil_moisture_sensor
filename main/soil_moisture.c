@@ -30,12 +30,12 @@ static const char *TAG = "MOISTURE";
 
 // Wi-Fi Configurations
 // at home: TP-Link_31B2, sweets1303 
-#define WIFI_SSID     "TP-Link_31B2"    // Replace with your Wi-Fi SSID
-#define WIFI_PASS     "sweets1303" // Replace with your Wi-Fi password
+#define WIFI_SSID     "sswaroops"    // Replace with your Wi-Fi SSID
+#define WIFI_PASS     "astu123$" // Replace with your Wi-Fi password
 #define WIFI_MAX_RETRY  5
 
 // Server configuration
-#define SERVER_IP "192.168.0.103"  // Replace with the server's IP address
+#define SERVER_IP "10.0.0.235"  // Replace with the server's IP address
 #define SERVER_PORT 12345          // Replace with the server's port
 
 // Wi-Fi event handler
@@ -246,14 +246,14 @@ void app_main(void)
             ESP_LOGI(TAG, "Command from server: %s", cmd_buf);
             if (strcmp(cmd_buf, "WATER_ON") == 0) {
                 // turn relay on for 2 seconds
-                gpio_set_level(RELAY_GPIO, 1);
+                gpio_set_level(RELAY_GPIO, 0);
                 vTaskDelay(pdMS_TO_TICKS(2000));
-                gpio_set_level(RELAY_GPIO, 0);
+                gpio_set_level(RELAY_GPIO, 1);
             } else if (strcmp(cmd_buf, "WATER_OFF") == 0){
-                gpio_set_level(RELAY_GPIO, 0);
+                gpio_set_level(RELAY_GPIO, 1);
             }
         } else {
-            gpio_set_level(RELAY_GPIO, 0);
+            gpio_set_level(RELAY_GPIO, 1);
         }
 
 
